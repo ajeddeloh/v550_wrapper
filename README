@@ -1,0 +1,13 @@
+Wrapper to intercept calls to the Epson V550 scanner interpreter API
+
+I needed a way to intercept these calls and log them. It logs all data written to/read from the
+interpreter interface. Using SANE_EPKOWA_DEBUG=hex works with things that use libsane-epkowa.so but
+fails for software that uses libiscan-plugin-perfection-v550.so directly, like VueScan.
+
+The .h file is unused, just there for reference. It's from the iscan source.
+
+Run make to build
+
+Install as /usr/lib/iscan/libiscan-plugin-perfection-v550.so and move the origin .so to
+/usr/lib/iscan/libiscan-plugin-perfection-v550-real.so. Probably best to just muck with the
+symlinks.

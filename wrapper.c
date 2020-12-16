@@ -1,3 +1,6 @@
+/*
+ * Wrapper around Epson iscan interpreter plugins to log reads/writes.
+ */
 #define _GNU_SOURCE
 
 #include <stdio.h>
@@ -22,13 +25,17 @@ typedef int (*function_s_0_t)(unsigned int offset, unsigned int width, unsigned 
 typedef void (*function_s_1_t)(uint8_t *in_buf, uint8_t *out_buf, unsigned int width,
 		bool color, double *table);
 
+#define PLUGIN_PATH "/usr/lib/iscan/libiscan-plugin-perfection-v550-real.so"
+
 static void *get_sym(const char *sym) {
 	static void *h;
 	if (!h) {
-		h = dlopen("/usr/lib/iscan/libiscan-plugin-perfection-v550-real.so", RTLD_LAZY);
+		h = dlopen(PLUGIN_PATH, RTLD_LAZY);
 	}
 	assert(h);
-	return dlsym(h, sym);
+	void *ret = dlsym(h, sym);
+	assert(ret);
+	return ret;
 }
 
 bool int_init(int fd, io_callback *read, io_callback *write) {
@@ -36,6 +43,9 @@ bool int_init(int fd, io_callback *read, io_callback *write) {
 	return orig(fd, read, write);
 }
 /*
+ * The original v550 plugin .so doesn't have this. libsane-epkowa will call this if it exists which
+ * will then crash since get_sym() will fail.
+ * 
 bool int_init_with_ctrl(int fd, io_callback *read, io_callback *write, ctrl_callback *ctrl) {
 	int_init_with_ctrl_t orig = (int_init_with_ctrl_t)get_sym("int_init_with_ctrl");
 	return orig(fd, read, write, ctrl);

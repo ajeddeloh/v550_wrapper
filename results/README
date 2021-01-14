@@ -1,0 +1,11 @@
+These are the results from running `./vuescan 2>filename.log`. I've removed all the image data and
+anything after that; these logs are everything leading up to receiving the image data.
+
+W: means this data was written to the scanner
+R: means this data was read from the scanner
+
+All data was captured with the trial version of VueScan, but I don't see anything indicating the
+full version would work any differently.
+
+Logs in preview-runs/ are from clicking the preview button in VueScan. Logs in scan-runs are from
+the scan button.
